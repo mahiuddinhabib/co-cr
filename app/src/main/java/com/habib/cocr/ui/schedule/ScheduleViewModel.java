@@ -17,6 +17,13 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
 
 public class ScheduleViewModel extends ViewModel {
 
@@ -42,7 +49,7 @@ public class ScheduleViewModel extends ViewModel {
         String today = days[Calendar.getInstance().get(Calendar.DAY_OF_WEEK) - 1];
 
         db.collection("classes").document("class-0001")
-                .collection("schedules").document("sunday") // change this to today after testing
+                .collection("schedules").document("saturday") // change this to today after testing
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -89,6 +96,21 @@ public class ScheduleViewModel extends ViewModel {
 //                                                            Log.d(TAG, "Venue: " + venue.getName());
 
                                                             sessions.add(session);
+
+                                                            // Sort the sessions by start time
+                                                            SimpleDateFormat format = new SimpleDateFormat("h:mma");
+                                                            Collections.sort(sessions, new Comparator<Session>() {
+                                                                @Override
+                                                                public int compare(Session s1, Session s2) {
+                                                                    try {
+                                                                        Date time1 = format.parse(s1.getStarts());
+                                                                        Date time2 = format.parse(s2.getStarts());
+                                                                        return time1.compareTo(time2);
+                                                                    } catch (ParseException e) {
+                                                                        throw new IllegalArgumentException(e);
+                                                                    }
+                                                                }
+                                                            });
                                                             sessionsLiveData.setValue(sessions);
                                                         });
                                             });

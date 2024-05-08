@@ -14,6 +14,7 @@ import com.habib.cocr.model.Session;
 import com.habib.cocr.model.Venue;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
@@ -36,8 +37,12 @@ public class ScheduleViewModel extends ViewModel {
 
 
     public void fetchSessions() {
+        // get the current day of the week
+        String[] days = new String[] {"sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"};
+        String today = days[Calendar.getInstance().get(Calendar.DAY_OF_WEEK) - 1];
+
         db.collection("classes").document("class-0001")
-                .collection("schedules").document("saturday")
+                .collection("schedules").document("sunday") // change this to today after testing
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {

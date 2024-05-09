@@ -1,6 +1,7 @@
 package com.habib.cocr.ui.schedule;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +19,12 @@ import com.habib.cocr.R;
 import com.habib.cocr.databinding.FragmentScheduleBinding;
 import com.habib.cocr.model.Session;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class ScheduleFragment extends Fragment {
+    private static final String TAG = "ScheduleFragment";
     private RecyclerView scheduleRecyclerView;
     private ScheduleAdapter scheduleAdapter;
     private LinearLayout detailsSection;
@@ -44,10 +50,8 @@ public class ScheduleFragment extends Fragment {
             scheduleRecyclerView.setAdapter(scheduleAdapter);
         });
 
-        scheduleViewModel.getCurrentOrUpcomingSession().observe(getViewLifecycleOwner(), session -> {
-            // Update the details section with the session's details
-            updateDetailsSection(session);
-        });
+        // Update the details section with the session's details
+        scheduleViewModel.getCurrentOrUpcomingSession().observe(getViewLifecycleOwner(), this::updateDetailsSection);
 
         // Observe the errorMessages LiveData
         scheduleViewModel.getErrorMessage().observe(getViewLifecycleOwner(), errorMessage -> {
@@ -63,15 +67,44 @@ public class ScheduleFragment extends Fragment {
 
     private void updateDetailsSection(Session session) {
         // Find the TextViews
+        TextView courseStatusTextView = getView().findViewById(R.id.course_status);
         TextView courseNameTextView = getView().findViewById(R.id.course_name);
         TextView courseTimeTextView = getView().findViewById(R.id.course_time);
         TextView courseTeacherTextView = getView().findViewById(R.id.course_teacher);
         TextView courseVenueTextView = getView().findViewById(R.id.course_venue);
 
-        // Update the TextViews with the session's details
-        courseNameTextView.setText(session.getCourse().getCourseTitle());
-        courseTimeTextView.setText(session.getStarts() + " - " + session.getEnds());
-        courseTeacherTextView.setText(session.getCourse().getCourseTeacherId()); // Assuming this is the teacher's name
-        courseVenueTextView.setText(session.getVenue().getName());
+        if(session != null){
+            // Update the TextViews with the session's details
+            courseNameTextView.setText(session.getCourse().getCourseTitle());
+            courseTimeTextView.setText(session.getStarts() + " - " + session.getEnds());
+            courseTeacherTextView.setText(session.getCourse().getCourseTeacherId()); // Assuming this is the teacher's name
+            courseVenueTextView.setText(session.getVenue().getName());
+
+            // Determine the status of the session
+            String currentDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd h:mma");
+            try {
+                Date now = new Date();
+                Date start = format.parse(currentDate + " " + session.getStarts());
+                Date end = format.parse(currentDate + " " + session.getEnds());
+
+                if (now.before(start)) {
+                    courseStatusTextView.setText("Upcoming");
+                } else if (now.after(start) && now.before(end)) {
+                    courseStatusTextView.setText("Ongoing");
+                } else {
+                    courseStatusTextView.setText("Finished");
+                }
+            } catch (ParseException e) {
+                Log.e(TAG, "Error parsing time", e);
+            }
+        } else {
+            // Update the TextViews for no more classes
+            courseNameTextView.setText("No more classes...");
+            courseTimeTextView.setText("Enjoy your day!");
+            courseTeacherTextView.setText("");
+            courseVenueTextView.setText("");
+        }
+
     }
 }

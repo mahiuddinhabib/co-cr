@@ -30,9 +30,9 @@ public class ScheduleViewModel extends ViewModel {
     private final MutableLiveData<List<Session>> sessionsLiveData = new MutableLiveData<>();
     private final MutableLiveData<Session> currentOrUpcomingSession = new MutableLiveData<>();
 
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-    private MutableLiveData<String> errorMessage = new MutableLiveData<>();
+    private final MutableLiveData<String> errorMessage = new MutableLiveData<>();
 
     public LiveData<List<Session>> getSessions() {
         return sessionsLiveData;
@@ -129,17 +129,20 @@ public class ScheduleViewModel extends ViewModel {
                                                                     if (now.after(start) && now.before(end)) {
                                                                         currentOrUpcomingSession.setValue(s);
                                                                         // Log the current session for debugging purposes
-                                                                        Log.d(TAG, "Inside current session block");
+//                                                                        Log.d(TAG, "Inside current session block");
                                                                         break;
                                                                     } else if (now.before(start)) {
                                                                         currentOrUpcomingSession.setValue(s);
                                                                         // Log the upcoming session for debugging purposes
-                                                                        Log.d(TAG, "Inside upcoming session block");
+//                                                                        Log.d(TAG, "Inside upcoming session block");
                                                                         break;
+                                                                    } else {
+                                                                        currentOrUpcomingSession.setValue(null);
                                                                     }
 
+
                                                                     // Log the current time for debugging purposes
-                                                                    Log.d(TAG, "Outside logical block :" + now.after(start) + " " + now.before(end) + ", Now: " + now + ", Starts: " + start + ", Ends: " + end);
+//                                                                    Log.d(TAG, "Outside logical block :" + now.after(start) + " " + now.before(end) + ", Now: " + now + ", Starts: " + start + ", Ends: " + end);
 
                                                                 } catch (ParseException e) {
                                                                     Log.e(TAG, "Error parsing time", e);

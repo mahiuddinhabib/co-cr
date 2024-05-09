@@ -5,11 +5,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -40,6 +43,10 @@ public class ScheduleFragment extends Fragment {
         detailsSection = root.findViewById(R.id.details_section);
         scheduleRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
+        // Find the ProgressBar and overlay
+        ProgressBar progressBar = root.findViewById(R.id.progress_bar);
+        FrameLayout overlay = root.findViewById(R.id.overlay);
+
         ScheduleViewModel scheduleViewModel = new ViewModelProvider(this).get(ScheduleViewModel.class);
         scheduleViewModel.getSessions().observe(getViewLifecycleOwner(), sessions -> {
             scheduleAdapter = new ScheduleAdapter(sessions, new ScheduleAdapter.OnItemClickListener() {
@@ -59,6 +66,17 @@ public class ScheduleFragment extends Fragment {
         scheduleViewModel.getErrorMessage().observe(getViewLifecycleOwner(), errorMessage -> {
             if (errorMessage != null) {
                 Toast.makeText(getContext(), errorMessage, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        // Observe the loading LiveData
+        scheduleViewModel.getIsLoading().observe(getViewLifecycleOwner(), isLoading -> {
+            if (isLoading) {
+                progressBar.setVisibility(View.VISIBLE);
+                overlay.setVisibility(View.VISIBLE);
+            } else {
+                progressBar.setVisibility(View.GONE);
+                overlay.setVisibility(View.GONE);
             }
         });
 

@@ -1,6 +1,7 @@
 package com.habib.cocr.ui.schedule;
 
 import android.util.Log;
+import android.view.View;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -33,9 +34,14 @@ public class ScheduleViewModel extends ViewModel {
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     private final MutableLiveData<String> errorMessage = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
 
     public LiveData<List<Session>> getSessions() {
         return sessionsLiveData;
+    }
+
+    public LiveData<Boolean> getIsLoading() {
+        return isLoading;
     }
 
     public LiveData<Session> getCurrentOrUpcomingSession() {
@@ -49,6 +55,8 @@ public class ScheduleViewModel extends ViewModel {
 
 
     public void fetchSessions() {
+        isLoading.setValue(true);
+
         // get the current day of the week
         String[] days = new String[] {"sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"};
         String today = days[Calendar.getInstance().get(Calendar.DAY_OF_WEEK) - 1];
@@ -161,6 +169,7 @@ public class ScheduleViewModel extends ViewModel {
                         Log.w(TAG, "Error getting documents.", task.getException());
                         errorMessage.setValue("Error getting documents: " + task.getException().getMessage());                    }
 
+                        isLoading.setValue(false);
                 });
     }
 }

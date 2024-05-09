@@ -28,12 +28,18 @@ public class ScheduleViewModel extends ViewModel {
 
     private static final String TAG = "ScheduleViewModel";
     private final MutableLiveData<List<Session>> sessionsLiveData = new MutableLiveData<>();
+    private final MutableLiveData<Session> currentOrUpcomingSession = new MutableLiveData<>();
+
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     private MutableLiveData<String> errorMessage = new MutableLiveData<>();
 
     public LiveData<List<Session>> getSessions() {
         return sessionsLiveData;
+    }
+
+    public LiveData<Session> getCurrentOrUpcomingSession() {
+        return currentOrUpcomingSession;
     }
 
     public LiveData<String> getErrorMessage() {
@@ -97,13 +103,15 @@ public class ScheduleViewModel extends ViewModel {
                                                             sessions.add(session);
 
                                                             // Sort the sessions by start time
-                                                            SimpleDateFormat format = new SimpleDateFormat("h:mma");
+//                                                            SimpleDateFormat format = new SimpleDateFormat("h:mma");
+                                                            String currentDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+                                                            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd h:mma");
                                                             Collections.sort(sessions, new Comparator<Session>() {
                                                                 @Override
                                                                 public int compare(Session s1, Session s2) {
                                                                     try {
-                                                                        Date time1 = format.parse(s1.getStarts());
-                                                                        Date time2 = format.parse(s2.getStarts());
+                                                                        Date time1 = format.parse(currentDate + " " + s1.getStarts());
+                                                                        Date time2 = format.parse(currentDate + " " + s2.getStarts());
                                                                         return time1.compareTo(time2);
                                                                     } catch (ParseException e) {
                                                                         throw new IllegalArgumentException(e);
@@ -111,6 +119,32 @@ public class ScheduleViewModel extends ViewModel {
                                                                 }
                                                             });
                                                             sessionsLiveData.setValue(sessions);
+
+                                                            // Determine the current or upcoming session
+                                                            Date now = new Date();
+                                                            for (Session s : sessions) {
+                                                                try {
+                                                                    Date start = format.parse(currentDate + " " + s.getStarts());
+                                                                    Date end = format.parse(currentDate + " " + s.getEnds());
+                                                                    if (now.after(start) && now.before(end)) {
+                                                                        currentOrUpcomingSession.setValue(s);
+                                                                        // Log the current session for debugging purposes
+                                                                        Log.d(TAG, "Inside current session block");
+                                                                        break;
+                                                                    } else if (now.before(start)) {
+                                                                        currentOrUpcomingSession.setValue(s);
+                                                                        // Log the upcoming session for debugging purposes
+                                                                        Log.d(TAG, "Inside upcoming session block");
+                                                                        break;
+                                                                    }
+
+                                                                    // Log the current time for debugging purposes
+                                                                    Log.d(TAG, "Outside logical block :" + now.after(start) + " " + now.before(end) + ", Now: " + now + ", Starts: " + start + ", Ends: " + end);
+
+                                                                } catch (ParseException e) {
+                                                                    Log.e(TAG, "Error parsing time", e);
+                                                                }
+                                                            }
                                                         });
                                             });
                                 }

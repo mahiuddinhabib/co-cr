@@ -1,18 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:app="http://schemas.android.com/apk/res-auto"
-xmlns:tools="http://schemas.android.com/tools"
-android:id="@+id/main"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-tools:context=".ui.schedule.ScheduleFragment">
-
-<androidx.recyclerview.widget.RecyclerView
-    android:id="@+id/schedule_recycler_view"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="8dp"
-    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-    tools:listitem="@layout/schedule_card" />
+    tools:context=".ui.schedule.ScheduleFragment">
+
+    <LinearLayout
+        android:id="@+id/details_section"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/schedule_recycler_view"
+        app:layout_constraintVertical_weight="3">
+
+        <TextView
+            android:id="@+id/course_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/course_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/course_teacher"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/course_venue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/schedule_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:padding="8dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintTop_toBottomOf="@+id/details_section"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintVertical_weight="7"
+        tools:listitem="@layout/schedule_card" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

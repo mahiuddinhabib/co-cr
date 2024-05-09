@@ -47,17 +47,4 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        int id = item.getItemId();
-//
-//        if (id == R.id.navigation_more) {
-//            MoreOptionsBottomSheet moreOptionsBottomSheet = new MoreOptionsBottomSheet();
-//            moreOptionsBottomSheet.show(getSupportFragmentManager(), "moreOptionsBottomSheet");
-//            return true;
-//        }
-//
-//        return super.onOptionsItemSelected(item);
-//    }
-
 }

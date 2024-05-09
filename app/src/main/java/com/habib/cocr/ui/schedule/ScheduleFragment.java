@@ -1,5 +1,6 @@
 package com.habib.cocr.ui.schedule;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -82,6 +83,7 @@ public class ScheduleFragment extends Fragment {
 
         // Swipe to refresh
         swipeRefreshLayout = root.findViewById(R.id.swipe_refresh_layout);
+        swipeRefreshLayout.setColorSchemeResources(R.color.purple_700, R.color.purple_500, R.color.purple_200);
         swipeRefreshLayout.setOnRefreshListener(() -> {
             scheduleViewModel.fetchSessions();
             swipeRefreshLayout.setRefreshing(false);

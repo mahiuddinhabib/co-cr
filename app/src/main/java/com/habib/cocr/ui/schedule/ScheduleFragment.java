@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.habib.cocr.R;
 import com.habib.cocr.databinding.FragmentScheduleBinding;
@@ -28,6 +29,7 @@ public class ScheduleFragment extends Fragment {
     private RecyclerView scheduleRecyclerView;
     private ScheduleAdapter scheduleAdapter;
     private LinearLayout detailsSection;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
 
     @Override
@@ -58,6 +60,13 @@ public class ScheduleFragment extends Fragment {
             if (errorMessage != null) {
                 Toast.makeText(getContext(), errorMessage, Toast.LENGTH_SHORT).show();
             }
+        });
+
+        // Swipe to refresh
+        swipeRefreshLayout = root.findViewById(R.id.swipe_refresh_layout);
+        swipeRefreshLayout.setOnRefreshListener(() -> {
+            scheduleViewModel.fetchSessions();
+            swipeRefreshLayout.setRefreshing(false);
         });
 
         scheduleViewModel.fetchSessions();

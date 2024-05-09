@@ -17,7 +17,6 @@ import com.habib.cocr.R;
 import com.habib.cocr.databinding.FragmentScheduleBinding;
 
 public class ScheduleFragment extends Fragment {
-    private ScheduleViewModel scheduleViewModel;
     private RecyclerView scheduleRecyclerView;
     private ScheduleAdapter scheduleAdapter;
 
@@ -28,7 +27,7 @@ public class ScheduleFragment extends Fragment {
         scheduleRecyclerView = root.findViewById(R.id.schedule_recycler_view);
         scheduleRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        scheduleViewModel = new ViewModelProvider(this).get(ScheduleViewModel.class);
+        ScheduleViewModel scheduleViewModel = new ViewModelProvider(this).get(ScheduleViewModel.class);
         scheduleViewModel.getSessions().observe(getViewLifecycleOwner(), sessions -> {
             scheduleAdapter = new ScheduleAdapter(sessions);
             scheduleRecyclerView.setAdapter(scheduleAdapter);

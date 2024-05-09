@@ -1,6 +1,7 @@
 package com.habib.cocr;
 
 import android.os.Bundle;
+import android.view.MenuItem;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -11,6 +12,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.habib.cocr.databinding.ActivityMainBinding;
+import com.habib.cocr.ui.more.MoreOptionsBottomSheet;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -27,11 +29,35 @@ public class MainActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_schedule, R.id.navigation_dashboard, R.id.navigation_notifications)
+                R.id.navigation_schedule, R.id.navigation_events, R.id.navigation_notices, R.id.navigation_more)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
+
+        navView.setOnItemSelectedListener(item -> {
+            if (item.getItemId() == R.id.navigation_more) {
+                MoreOptionsBottomSheet moreOptionsBottomSheet = new MoreOptionsBottomSheet();
+                moreOptionsBottomSheet.show(getSupportFragmentManager(), "moreOptionsBottomSheet");
+                return true;
+            } else {
+                NavigationUI.onNavDestinationSelected(item, navController);
+                return true;
+            }
+        });
     }
+
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        int id = item.getItemId();
+//
+//        if (id == R.id.navigation_more) {
+//            MoreOptionsBottomSheet moreOptionsBottomSheet = new MoreOptionsBottomSheet();
+//            moreOptionsBottomSheet.show(getSupportFragmentManager(), "moreOptionsBottomSheet");
+//            return true;
+//        }
+//
+//        return super.onOptionsItemSelected(item);
+//    }
 
 }

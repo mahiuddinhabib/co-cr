@@ -12,14 +12,14 @@
         tools:layout="@layout/fragment_schedule" />
 
     <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="com.habib.cocr.ui.dashboard.DashboardFragment"
-        android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        android:id="@+id/navigation_events"
+        android:name="com.habib.cocr.ui.events.EventsFragment"
+        android:label="@string/title_events"
+        tools:layout="@layout/fragment_events" />
 
     <fragment
-        android:id="@+id/navigation_notifications"
-        android:name="com.habib.cocr.ui.notifications.NotificationsFragment"
-        android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
+        android:id="@+id/navigation_notices"
+        android:name="com.habib.cocr.ui.notices.NoticesFragment"
+        android:label="@string/title_notices"
+        tools:layout="@layout/fragment_notices" />
 </navigation>

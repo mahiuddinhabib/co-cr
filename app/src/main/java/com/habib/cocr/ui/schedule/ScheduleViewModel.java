@@ -1,7 +1,6 @@
 package com.habib.cocr.ui.schedule;
 
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -49,7 +48,7 @@ public class ScheduleViewModel extends ViewModel {
         String today = days[Calendar.getInstance().get(Calendar.DAY_OF_WEEK) - 1];
 
         db.collection("classes").document("class-0001")
-                .collection("schedules").document("saturday") // change this to today after testing
+                .collection("schedules").document("sunday") // change this to today after testing
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {

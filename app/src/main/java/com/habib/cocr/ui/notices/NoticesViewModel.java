@@ -1,16 +1,16 @@
-package com.habib.cocr.ui.notifications;
+package com.habib.cocr.ui.notices;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class NotificationsViewModel extends ViewModel {
+public class NoticesViewModel extends ViewModel {
 
     private final MutableLiveData<String> mText;
 
-    public NotificationsViewModel() {
+    public NoticesViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("This is notifications fragment");
+        mText.setValue("This is notices fragment");
     }
 
     public LiveData<String> getText() {

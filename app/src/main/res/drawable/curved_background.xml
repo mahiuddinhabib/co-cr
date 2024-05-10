@@ -4,18 +4,24 @@
     <!-- Base background color -->
     <item android:drawable="?android:colorBackground"/>
 
-    <!-- Centered rectangle for main background -->
+<!--     Centered rectangle for main background-->
 <!--    <item android:gravity="center" android:drawable="?android:colorBackground">-->
 <!--        <shape android:shape="rectangle">-->
-<!--            <solid android:color="@color/black"/>-->
+<!--            <solid android:color="?colorPrimary"/>-->
 <!--        </shape>-->
 <!--    </item>-->
 
     <!-- Oval shape for rounded border -->
-    <item android:bottom="520dp" android:left="-170dp" android:right="-170dp" android:top="-400dp">
+    <item android:bottom="520dp" android:left="-150dp" android:right="-150dp" android:top="-400dp">
         <shape android:shape="oval">
             <solid android:color="?colorPrimary"/>
         </shape>
     </item>
+
+<!--    <item android:top="200dp">-->
+<!--        <shape android:shape="rectangle">-->
+<!--            <solid android:color="@color/white"/>-->
+<!--        </shape>-->
+<!--    </item>-->
 
 </layer-list>

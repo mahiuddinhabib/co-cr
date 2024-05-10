@@ -10,6 +10,8 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.habib.cocr.MainActivity;
+import com.habib.cocr.R;
 import com.habib.cocr.databinding.FragmentEventsBinding;
 
 public class EventsFragment extends Fragment {
@@ -18,6 +20,8 @@ public class EventsFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+        // Set the title of the ActionBar
+        MainActivity.actionBarTitle.setText(R.string.title_events);
         EventsViewModel eventsViewModel =
                 new ViewModelProvider(this).get(EventsViewModel.class);
 

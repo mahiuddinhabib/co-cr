@@ -28,7 +28,7 @@
                 android:background="@drawable/status_tag_background"
                 android:textColor="@color/white"
                 android:textStyle="italic"
-                android:text="upcoming"
+                android:text="loading..."
                 android:textSize="14sp" />
 
             <TextView
@@ -37,8 +37,8 @@
                 android:layout_height="wrap_content"
                 android:textSize="20sp"
                 android:textColor="@color/white"
-                android:layout_marginTop="16dp"
-                android:text="Electrical Circuit Analysis"
+                android:layout_marginTop="9dp"
+                android:text="Course Tile Is Loading..."
                 android:textStyle="bold" />
 
             <TextView
@@ -47,7 +47,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/white"
                 android:layout_marginTop="8dp"
-                android:text="Teacher: Dr. Sazzad Hossain"
+                android:text="Teacher: Course Teacher Is Loading..."
                 android:textSize="14sp" />
 
             <TextView
@@ -56,7 +56,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/white"
                 android:layout_marginTop="2dp"
-                android:text="Time: 9:00AM - 10:00AM"
+                android:text="Time: 0:00AM - 00:00AM"
                 android:textSize="14sp" />
 
             <TextView
@@ -65,7 +65,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/white"
                 android:layout_marginTop="2dp"
-                android:text="Venue: CSE Room 101"
+                android:text="Venue: Venue Is Loading..."
                 android:textSize="14sp" />
 
         </LinearLayout>
@@ -74,7 +74,10 @@
             android:id="@+id/schedule_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:padding="8dp"
+            android:layout_marginBottom="56dp"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:paddingBottom="8dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintTop_toBottomOf="@+id/details_section"
             app:layout_constraintBottom_toBottomOf="parent"

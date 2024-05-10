@@ -10,6 +10,8 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.habib.cocr.MainActivity;
+import com.habib.cocr.R;
 import com.habib.cocr.databinding.FragmentNoticesBinding;
 
 public class NoticesFragment extends Fragment {
@@ -18,6 +20,9 @@ public class NoticesFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+        // Set the title of the ActionBar
+        MainActivity.actionBarTitle.setText(R.string.title_notices);
+
         NoticesViewModel noticesViewModel =
                 new ViewModelProvider(this).get(NoticesViewModel.class);
 

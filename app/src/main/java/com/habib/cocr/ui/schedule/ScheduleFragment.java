@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.habib.cocr.MainActivity;
 import com.habib.cocr.R;
 import com.habib.cocr.databinding.FragmentScheduleBinding;
 import com.habib.cocr.model.Session;
@@ -43,6 +44,9 @@ public class ScheduleFragment extends Fragment {
         scheduleRecyclerView = root.findViewById(R.id.schedule_recycler_view);
         detailsSection = root.findViewById(R.id.details_section);
         scheduleRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        // Set the title of the ActionBar
+        MainActivity.actionBarTitle.setText(R.string.title_schedule);
 
         // Find the ProgressBar and overlay
         ProgressBar progressBar = root.findViewById(R.id.progress_bar);
@@ -108,6 +112,7 @@ public class ScheduleFragment extends Fragment {
             courseTimeTextView.setText("Time: "+session.getStarts() + " - " + session.getEnds());
             courseTeacherTextView.setText("Teacher: "+session.getCourseTeacherName());
             courseVenueTextView.setText("Venue: "+session.getVenue().getName());
+            courseStatusTextView.setVisibility(View.VISIBLE);
 
             // Determine the status of the session
             String currentDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
@@ -129,9 +134,10 @@ public class ScheduleFragment extends Fragment {
             }
         } else {
             // Update the TextViews for no more classes
+            courseStatusTextView.setVisibility(View.GONE);
             courseNameTextView.setText("No more classes...");
-            courseTimeTextView.setText("Enjoy your day!");
-            courseTeacherTextView.setText("");
+            courseTeacherTextView.setText("Enjoy your day!");
+            courseTimeTextView.setText("");
             courseVenueTextView.setText("");
         }
 

@@ -8,6 +8,7 @@ public class Session {
 
     private String venueId;
     private boolean isCancelled;
+    private String courseTeacherName;
     private Course course;
     private Venue venue;
 
@@ -73,4 +74,11 @@ public class Session {
         this.venue = venue;
     }
 
+    public String getCourseTeacherName() {
+        return courseTeacherName;
+    }
+
+    public void setCourseTeacherName(String courseTeacherName) {
+        this.courseTeacherName = courseTeacherName;
+    }
 }

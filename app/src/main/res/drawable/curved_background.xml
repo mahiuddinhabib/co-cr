@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Base background color -->
+    <item android:drawable="?android:colorBackground"/>
+
+    <!-- Centered rectangle for main background -->
+<!--    <item android:gravity="center" android:drawable="?android:colorBackground">-->
+<!--        <shape android:shape="rectangle">-->
+<!--            <solid android:color="@color/black"/>-->
+<!--        </shape>-->
+<!--    </item>-->
+
+    <!-- Oval shape for rounded border -->
+    <item android:bottom="520dp" android:left="-170dp" android:right="-170dp" android:top="-400dp">
+        <shape android:shape="oval">
+            <solid android:color="?colorPrimary"/>
+        </shape>
+    </item>
+
+</layer-list>

@@ -105,9 +105,9 @@ public class ScheduleFragment extends Fragment {
         if(session != null){
             // Update the TextViews with the session's details
             courseNameTextView.setText(session.getCourse().getCourseTitle());
-            courseTimeTextView.setText(session.getStarts() + " - " + session.getEnds());
-            courseTeacherTextView.setText(session.getCourse().getCourseTeacherId()); // Assuming this is the teacher's name
-            courseVenueTextView.setText(session.getVenue().getName());
+            courseTimeTextView.setText("Time: "+session.getStarts() + " - " + session.getEnds());
+            courseTeacherTextView.setText("Teacher: "+session.getCourseTeacherName());
+            courseVenueTextView.setText("Venue: "+session.getVenue().getName());
 
             // Determine the status of the session
             String currentDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
@@ -118,11 +118,11 @@ public class ScheduleFragment extends Fragment {
                 Date end = format.parse(currentDate + " " + session.getEnds());
 
                 if (now.before(start)) {
-                    courseStatusTextView.setText("Upcoming");
+                    courseStatusTextView.setText("upcoming");
                 } else if (now.after(start) && now.before(end)) {
-                    courseStatusTextView.setText("Ongoing");
+                    courseStatusTextView.setText("ongoing");
                 } else {
-                    courseStatusTextView.setText("Finished");
+                    courseStatusTextView.setText("finished");
                 }
             } catch (ParseException e) {
                 Log.e(TAG, "Error parsing time", e);

@@ -57,22 +57,15 @@ public class ScheduleViewModel extends ViewModel {
     public void fetchSessions() {
         isLoading.setValue(true);
 
-        // get the current day of the week
         String[] days = new String[] {"sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"};
         String today = days[Calendar.getInstance().get(Calendar.DAY_OF_WEEK) - 1];
 
         db.collection("classes").document("class-0001")
-                .collection("schedules").document("sunday") // change this to today after testing
+                .collection("schedules").document("sunday")
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         DocumentSnapshot document = task.getResult();
-
-                        // For debugging purposes, log the document data
-//                        for (Map.Entry<String, Object> entry : document.getData().entrySet()) {
-//                            Log.d(TAG, entry.getKey() + " => " + entry.getValue());
-//                        }
-
                         if (document.exists()) {
                             List<Session> sessions = new ArrayList<>();
                             List<Map<String, Object>> scheduleList = (List<Map<String, Object>>) document.get("schedule");
@@ -85,9 +78,6 @@ public class ScheduleViewModel extends ViewModel {
                                     session.setVenueId((String) item.get("venueId"));
                                     session.setCancelled((Boolean) item.get("isCancelled"));
 
-                                    // Log the session data for debugging purposes
-//                                    Log.d(TAG, "Session: " + session.getCourseId() + " " + session.getStarts() + " " + session.getEnds() + " " + session.getVenueId() + " " + session.isCancelled());
-
                                     db.collection("departments").document("dept-0001")
                                             .collection("courses").document(session.getCourseId())
                                             .get()
@@ -95,81 +85,71 @@ public class ScheduleViewModel extends ViewModel {
                                                 Course course = documentSnapshot.toObject(Course.class);
                                                 session.setCourse(course);
 
-                                                // Log the course data for debugging purposes
-//                                                Log.d(TAG, "Course: " + course.getCourseTitle() + " " + course.getCourseCode() + " " + course.getCourseCredit() + " " + course.getCourseTeacherId());
-
-                                                db.collection("departments").document("dept-0001")
-                                                        .collection("venues").document(session.getVenueId())
+                                                // Fetch the teacher's name
+                                                db.collection("users").document(course.getCourseTeacherId())
                                                         .get()
                                                         .addOnSuccessListener(documentSnapshot2 -> {
-                                                            Venue venue = documentSnapshot2.toObject(Venue.class);
-                                                            session.setVenue(venue);
+                                                            String teacherName = documentSnapshot2.getString("name");
+                                                            session.setCourseTeacherName(teacherName); // Set the teacher's name
 
-                                                            // Log the venue data for debugging purposes
-//                                                            Log.d(TAG, "Venue: " + venue.getName());
+                                                            db.collection("departments").document("dept-0001")
+                                                                    .collection("venues").document(session.getVenueId())
+                                                                    .get()
+                                                                    .addOnSuccessListener(documentSnapshot3 -> {
+                                                                        Venue venue = documentSnapshot3.toObject(Venue.class);
+                                                                        session.setVenue(venue);
 
-                                                            sessions.add(session);
+                                                                        sessions.add(session);
 
-                                                            // Sort the sessions by start time
-//                                                            SimpleDateFormat format = new SimpleDateFormat("h:mma");
-                                                            String currentDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-                                                            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd h:mma");
-                                                            Collections.sort(sessions, new Comparator<Session>() {
-                                                                @Override
-                                                                public int compare(Session s1, Session s2) {
-                                                                    try {
-                                                                        Date time1 = format.parse(currentDate + " " + s1.getStarts());
-                                                                        Date time2 = format.parse(currentDate + " " + s2.getStarts());
-                                                                        return time1.compareTo(time2);
-                                                                    } catch (ParseException e) {
-                                                                        throw new IllegalArgumentException(e);
-                                                                    }
-                                                                }
-                                                            });
-                                                            sessionsLiveData.setValue(sessions);
+                                                                        String currentDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+                                                                        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd h:mma");
+                                                                        Collections.sort(sessions, new Comparator<Session>() {
+                                                                            @Override
+                                                                            public int compare(Session s1, Session s2) {
+                                                                                try {
+                                                                                    Date time1 = format.parse(currentDate + " " + s1.getStarts());
+                                                                                    Date time2 = format.parse(currentDate + " " + s2.getStarts());
+                                                                                    return time1.compareTo(time2);
+                                                                                } catch (ParseException e) {
+                                                                                    throw new IllegalArgumentException(e);
+                                                                                }
+                                                                            }
+                                                                        });
+                                                                        sessionsLiveData.setValue(sessions);
 
-                                                            // Determine the current or upcoming session
-                                                            Date now = new Date();
-                                                            for (Session s : sessions) {
-                                                                try {
-                                                                    Date start = format.parse(currentDate + " " + s.getStarts());
-                                                                    Date end = format.parse(currentDate + " " + s.getEnds());
-                                                                    if (now.after(start) && now.before(end)) {
-                                                                        currentOrUpcomingSession.setValue(s);
-                                                                        // Log the current session for debugging purposes
-//                                                                        Log.d(TAG, "Inside current session block");
-                                                                        break;
-                                                                    } else if (now.before(start)) {
-                                                                        currentOrUpcomingSession.setValue(s);
-                                                                        // Log the upcoming session for debugging purposes
-//                                                                        Log.d(TAG, "Inside upcoming session block");
-                                                                        break;
-                                                                    } else {
-                                                                        currentOrUpcomingSession.setValue(null);
-                                                                    }
-
-
-                                                                    // Log the current time for debugging purposes
-//                                                                    Log.d(TAG, "Outside logical block :" + now.after(start) + " " + now.before(end) + ", Now: " + now + ", Starts: " + start + ", Ends: " + end);
-
-                                                                } catch (ParseException e) {
-                                                                    Log.e(TAG, "Error parsing time", e);
-                                                                }
-                                                            }
+                                                                        Date now = new Date();
+                                                                        for (Session s : sessions) {
+                                                                            try {
+                                                                                Date start = format.parse(currentDate + " " + s.getStarts());
+                                                                                Date end = format.parse(currentDate + " " + s.getEnds());
+                                                                                if (now.after(start) && now.before(end)) {
+                                                                                    currentOrUpcomingSession.setValue(s);
+                                                                                    break;
+                                                                                } else if (now.before(start)) {
+                                                                                    currentOrUpcomingSession.setValue(s);
+                                                                                    break;
+                                                                                } else {
+                                                                                    currentOrUpcomingSession.setValue(null);
+                                                                                }
+                                                                            } catch (ParseException e) {
+                                                                                Log.e(TAG, "Error parsing time", e);
+                                                                            }
+                                                                        }
+                                                                    });
                                                         });
                                             });
                                 }
                             }
-
-                        }
-                        else {
+                        } else {
                             Log.w(TAG, "Error getting documents.", task.getException());
-                            errorMessage.setValue("Error getting documents: " + task.getException().getMessage());                        }
+                            errorMessage.setValue("Error getting documents: " + task.getException().getMessage());
+                        }
                     } else {
                         Log.w(TAG, "Error getting documents.", task.getException());
-                        errorMessage.setValue("Error getting documents: " + task.getException().getMessage());                    }
+                        errorMessage.setValue("Error getting documents: " + task.getException().getMessage());
+                    }
 
-                        isLoading.setValue(false);
+                    isLoading.setValue(false);
                 });
     }
 }

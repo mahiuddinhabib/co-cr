@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+<!--    <solid android:color="#FFFFFF"/> &lt;!&ndash; Change this to your desired background color &ndash;&gt;-->
+    <corners android:radius="16dp" />
+    <stroke android:color="@color/white" android:width="1dp"/> <!-- Change this to your desired border color and width -->
+    <padding android:left="8dp" android:top="4dp" android:right="8dp" android:bottom="4dp"/> <!-- Padding around the text -->
+</shape>

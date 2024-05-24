@@ -1,7 +1,10 @@
 package com.habib.cocr;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -20,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
     public static TextView actionBarTitle;
+    ImageView accountIcon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +36,8 @@ public class MainActivity extends AppCompatActivity {
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        accountIcon = findViewById(R.id.account_icon);
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
@@ -51,6 +57,14 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 NavigationUI.onNavDestinationSelected(item, navController);
                 return true;
+            }
+        });
+
+        accountIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, AccountDetailActivity.class);
+                startActivity(intent);
             }
         });
     }

@@ -5,7 +5,7 @@
     android:padding="16dp">
 
     <EditText
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Name"
         android:id="@+id/nameField"
@@ -38,11 +38,40 @@
         android:hint="Contact No"
         android:inputType="phone" />
 
+    <Spinner
+        android:id="@+id/institutionSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/contactNoField"
+        android:layout_marginTop="16dp" />
+
+    <Spinner
+        android:id="@+id/departmentSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/institutionSpinner"
+        android:layout_marginTop="16dp" />
+
+    <Spinner
+        android:id="@+id/roleSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/departmentSpinner"
+        android:layout_marginTop="16dp" />
+
+    <Spinner
+        android:id="@+id/classSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/roleSpinner"
+        android:layout_marginTop="16dp"
+        android:visibility="gone" />
+
     <Button
         android:id="@+id/registerButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/contactNoField"
+        android:layout_below="@id/classSpinner"
         android:layout_marginTop="16dp"
         android:text="Register" />
 

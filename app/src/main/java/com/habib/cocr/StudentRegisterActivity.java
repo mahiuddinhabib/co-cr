@@ -3,7 +3,6 @@ package com.habib.cocr;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -28,6 +27,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.habib.cocr.utils.GlobalState;
 import com.habib.cocr.utils.SpinnerItem;
 
 import java.util.ArrayList;
@@ -35,18 +35,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class RegisterActivity extends AppCompatActivity {
+public class StudentRegisterActivity extends AppCompatActivity {
 
-    private static final String TAG = "RegisterActivity";
+    private static final String TAG = "StudentRegisterActivity";
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
     private EditText emailField, passwordField, nameField, contactNoField;
-    private Spinner institutionSpinner, departmentSpinner, roleSpinner, classSpinner;
+    private Spinner institutionSpinner, departmentSpinner, classSpinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register);
+        setContentView(R.layout.activity_student_register);
 
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
@@ -57,7 +57,7 @@ public class RegisterActivity extends AppCompatActivity {
         contactNoField = findViewById(R.id.contactNoField);
         institutionSpinner = findViewById(R.id.institutionSpinner);
         departmentSpinner = findViewById(R.id.departmentSpinner);
-        roleSpinner = findViewById(R.id.roleSpinner);
+//        roleSpinner = findViewById(R.id.roleSpinner);
         classSpinner = findViewById(R.id.classSpinner);
 
         populateInstitutions();
@@ -80,7 +80,7 @@ public class RegisterActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 SpinnerItem selectedItem = (SpinnerItem) parent.getItemAtPosition(position);
                 if (selectedItem.getName().equals("Add new institution")) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(StudentRegisterActivity.this);
                     builder.setTitle("Add new institution");
 
 // Inflate the custom layout
@@ -159,7 +159,7 @@ public class RegisterActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 SpinnerItem selectedItem = (SpinnerItem) parent.getItemAtPosition(position);
                 if (selectedItem.getName().equals("Add new department")) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(StudentRegisterActivity.this);
                     builder.setTitle("Add new department");
 
                     // Inflate the custom layout
@@ -222,21 +222,21 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
-        roleSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String selectedRole = ((SpinnerItem) parent.getItemAtPosition(position)).getValue();
-                if (selectedRole.equals("student")) {
-                    classSpinner.setVisibility(View.VISIBLE);
-                } else {
-                    classSpinner.setVisibility(View.GONE);
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
-        });
+//        roleSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                String selectedRole = ((SpinnerItem) parent.getItemAtPosition(position)).getValue();
+//                if (selectedRole.equals("student")) {
+//                    classSpinner.setVisibility(View.VISIBLE);
+//                } else {
+//                    classSpinner.setVisibility(View.GONE);
+//                }
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> parent) {
+//            }
+//        });
 
         Button registerButton = findViewById(R.id.registerButton);
         registerButton.setOnClickListener(new View.OnClickListener() {
@@ -260,7 +260,7 @@ public class RegisterActivity extends AppCompatActivity {
                                 institutions.add(new SpinnerItem(document.getId(), document.getString("name")));
                             }
                             institutions.add(new SpinnerItem("", "Add new institution"));
-                            ArrayAdapter<SpinnerItem> adapter = new ArrayAdapter<>(RegisterActivity.this, android.R.layout.simple_spinner_item, institutions);
+                            ArrayAdapter<SpinnerItem> adapter = new ArrayAdapter<>(StudentRegisterActivity.this, android.R.layout.simple_spinner_item, institutions);
                             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                             institutionSpinner.setAdapter(adapter);
                         } else {
@@ -284,7 +284,7 @@ public class RegisterActivity extends AppCompatActivity {
                                 departments.add(new SpinnerItem(document.getId(), document.getString("name")));
                             }
                             departments.add(new SpinnerItem("", "Add new department"));
-                            ArrayAdapter<SpinnerItem> adapter = new ArrayAdapter<>(RegisterActivity.this, android.R.layout.simple_spinner_item, departments);
+                            ArrayAdapter<SpinnerItem> adapter = new ArrayAdapter<>(StudentRegisterActivity.this, android.R.layout.simple_spinner_item, departments);
                             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                             departmentSpinner.setAdapter(adapter);
                         } else {
@@ -308,7 +308,7 @@ public class RegisterActivity extends AppCompatActivity {
 //                                classes.add(new SpinnerItem(document.getId(), document.getString("name")));
 //                            }
 //                            classes.add(new SpinnerItem("", "Add new class"));
-//                            ArrayAdapter<SpinnerItem> adapter = new ArrayAdapter<>(RegisterActivity.this, android.R.layout.simple_spinner_item, classes);
+//                            ArrayAdapter<SpinnerItem> adapter = new ArrayAdapter<>(StudentRegisterActivity.this, android.R.layout.simple_spinner_item, classes);
 //                            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 //                            classSpinner.setAdapter(adapter);
 //                        } else {
@@ -332,7 +332,7 @@ public class RegisterActivity extends AppCompatActivity {
                                 classes.add(new SpinnerItem(document.getId(), document.getString("name")));
                             }
                             classes.add(new SpinnerItem("", "Add new class"));
-                            ArrayAdapter<SpinnerItem> adapter = new ArrayAdapter<>(RegisterActivity.this, android.R.layout.simple_spinner_item, classes);
+                            ArrayAdapter<SpinnerItem> adapter = new ArrayAdapter<>(StudentRegisterActivity.this, android.R.layout.simple_spinner_item, classes);
                             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                             classSpinner.setAdapter(adapter);
                         } else {
@@ -346,7 +346,7 @@ public class RegisterActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 SpinnerItem selectedItem = (SpinnerItem) parent.getItemAtPosition(position);
                 if (selectedItem.getName().equals("Add new class")) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(StudentRegisterActivity.this);
                     builder.setTitle("Add new class");
 
                     // Inflate the custom layout
@@ -411,7 +411,7 @@ public class RegisterActivity extends AppCompatActivity {
         roles.add(new SpinnerItem("student", "Student"));
         ArrayAdapter<SpinnerItem> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, roles);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        roleSpinner.setAdapter(adapter);
+//        roleSpinner.setAdapter(adapter);
     }
 
     private void registerUser() {
@@ -421,8 +421,7 @@ public class RegisterActivity extends AppCompatActivity {
         String contactNo = contactNoField.getText().toString();
         String institutionId = ((SpinnerItem) institutionSpinner.getSelectedItem()).getValue();
         String departmentId = ((SpinnerItem) departmentSpinner.getSelectedItem()).getValue();
-        String role = ((SpinnerItem) roleSpinner.getSelectedItem()).getValue();
-        String classId = role.equals("student") ? ((SpinnerItem) classSpinner.getSelectedItem()).getValue() : null;
+        String classId = ((SpinnerItem) classSpinner.getSelectedItem()).getValue();
 
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -437,10 +436,8 @@ public class RegisterActivity extends AppCompatActivity {
                             userMap.put("contactNo", contactNo);
 //                            userMap.put("institution", institutionId);
                             userMap.put("departmentId", departmentId);
-                            userMap.put("role", role);
-                            if (classId != null) {
-                                userMap.put("classId", classId);
-                            }
+                            userMap.put("role", "student");
+                            userMap.put("classId", classId);
 
                             db.collection("users").document(user.getUid())
                                     .set(userMap)
@@ -448,7 +445,10 @@ public class RegisterActivity extends AppCompatActivity {
                                         @Override
                                         public void onSuccess(Void aVoid) {
                                             Log.d(TAG, "DocumentSnapshot added with ID: " + user.getUid());
-                                            startActivity(new Intent(RegisterActivity.this, MainActivity.class));
+                                            // Store user data in global state
+                                            GlobalState globalState = GlobalState.getInstance(StudentRegisterActivity.this);
+                                            globalState.loadCurrentUser(user);
+                                            startActivity(new Intent(StudentRegisterActivity.this, MainActivity.class));
                                             finish();
                                         }
                                     })
@@ -465,13 +465,13 @@ public class RegisterActivity extends AppCompatActivity {
                                                             }
                                                         }
                                                     });
-                                            Toast.makeText(RegisterActivity.this, "Failed to create user. Please try again.",
+                                            Toast.makeText(StudentRegisterActivity.this, "Failed to create user. Please try again.",
                                                     Toast.LENGTH_SHORT).show();
                                         }
                                     });
                         } else {
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                            Toast.makeText(RegisterActivity.this, "Authentication failed.",
+                            Toast.makeText(StudentRegisterActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
                         }
                     }

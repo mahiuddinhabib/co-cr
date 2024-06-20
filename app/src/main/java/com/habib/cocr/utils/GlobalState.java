@@ -173,7 +173,9 @@ public class GlobalState {
                                 if(getCurrentUserRole().equals("student")) {
                                     setCurrentUserClassId(document.getString("classId"));
                                 }
-                                setCurrentUserProfileImg(user.getPhotoUrl());
+                                if(user.getPhotoUrl() != null) {
+                                    setCurrentUserProfileImg(user.getPhotoUrl());
+                                }
                                 // Add other fields as needed
                             } else {
                                 Log.d("GlobalState", "No such document");

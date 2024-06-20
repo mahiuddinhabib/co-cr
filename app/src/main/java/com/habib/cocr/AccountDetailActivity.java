@@ -43,6 +43,7 @@ public class AccountDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 FirebaseAuth.getInstance().signOut();
+                globalState.clearCurrentUser();
                 Intent intent = new Intent(AccountDetailActivity.this, LoginActivity.class);
                 startActivity(intent);
                 finish();

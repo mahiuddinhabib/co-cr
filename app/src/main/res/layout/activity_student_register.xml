@@ -35,7 +35,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/passwordField"
         android:layout_marginTop="16dp"
-        android:hint="Contact No"
+        android:hint="Contact No (Optional)"
         android:inputType="phone" />
 
     <Spinner
@@ -52,20 +52,19 @@
         android:layout_below="@id/institutionSpinner"
         android:layout_marginTop="16dp" />
 
-    <Spinner
-        android:id="@+id/roleSpinner"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/departmentSpinner"
-        android:layout_marginTop="16dp" />
+<!--    <Spinner-->
+<!--        android:id="@+id/roleSpinner"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_below="@id/departmentSpinner"-->
+<!--        android:layout_marginTop="16dp" />-->
 
     <Spinner
         android:id="@+id/classSpinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/roleSpinner"
-        android:layout_marginTop="16dp"
-        android:visibility="gone" />
+        android:layout_below="@id/departmentSpinner"
+        android:layout_marginTop="16dp" />
 
     <Button
         android:id="@+id/registerButton"

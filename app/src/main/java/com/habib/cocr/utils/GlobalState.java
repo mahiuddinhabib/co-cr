@@ -1,6 +1,7 @@
 package com.habib.cocr.utils;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.util.Log;
 
@@ -16,6 +17,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 public class GlobalState {
     private static GlobalState globalState = null;
     private final Context applicationContext;
+    private final SharedPreferences sharedPreferences;
 
     // Global states
     private String currentUserId;
@@ -30,6 +32,7 @@ public class GlobalState {
     // Private constructor
     private GlobalState(Context context) {
         this.applicationContext = context.getApplicationContext();
+        this.sharedPreferences = context.getSharedPreferences("GlobalStatePrefs", Context.MODE_PRIVATE);
     }
 
     // Getters and Setters
@@ -41,82 +44,114 @@ public class GlobalState {
     }
 
     public String getCurrentUserId() {
+        if (currentUserId == null) {
+            currentUserId = sharedPreferences.getString("currentUserId", null);
+        }
         return currentUserId;
     }
 
     public void setCurrentUserId(String currentUserId) {
         this.currentUserId = currentUserId;
+        sharedPreferences.edit().putString("currentUserId", currentUserId).apply();
     }
 
     public String getCurrentUserName() {
+        if (currentUserName == null) {
+            currentUserName = sharedPreferences.getString("currentUserName", null);
+        }
         return currentUserName;
     }
 
     public void setCurrentUserName(String currentUserName) {
         this.currentUserName = currentUserName;
+        sharedPreferences.edit().putString("currentUserName", currentUserName).apply();
     }
 
     public String getCurrentUserEmail() {
+        if (currentUserEmail == null) {
+            currentUserEmail = sharedPreferences.getString("currentUserEmail", null);
+        }
         return currentUserEmail;
     }
 
     public void setCurrentUserEmail(String currentUserEmail) {
         this.currentUserEmail = currentUserEmail;
+        sharedPreferences.edit().putString("currentUserEmail", currentUserEmail).apply();
     }
 
     public String getCurrentUserContactNo() {
+        if (currentUserContactNo == null) {
+            currentUserContactNo = sharedPreferences.getString("currentUserContactNo", null);
+        }
         return currentUserContactNo;
     }
 
     public void setCurrentUserContactNo(String currentUserContactNo) {
         this.currentUserContactNo = currentUserContactNo;
+        sharedPreferences.edit().putString("currentUserContactNo", currentUserContactNo).apply();
     }
 
     public String getCurrentUserRole() {
+        if (currentUserRole == null) {
+            currentUserRole = sharedPreferences.getString("currentUserRole", null);
+        }
         return currentUserRole;
     }
 
     public void setCurrentUserRole(String currentUserRole) {
         this.currentUserRole = currentUserRole;
+        sharedPreferences.edit().putString("currentUserRole", currentUserRole).apply();
     }
 
     public String getCurrentUserDepartmentId() {
+        if (currentUserDepartmentId == null) {
+            currentUserDepartmentId = sharedPreferences.getString("currentUserDepartmentId", null);
+        }
         return currentUserDepartmentId;
     }
 
     public void setCurrentUserDepartmentId(String currentUserDepartmentId) {
         this.currentUserDepartmentId = currentUserDepartmentId;
+        sharedPreferences.edit().putString("currentUserDepartmentId", currentUserDepartmentId).apply();
     }
 
     public String getCurrentUserClassId() {
+        if (currentUserClassId == null) {
+            currentUserClassId = sharedPreferences.getString("currentUserClassId", null);
+        }
         return currentUserClassId;
     }
 
     public void setCurrentUserClassId(String currentUserClassId) {
         this.currentUserClassId = currentUserClassId;
+        sharedPreferences.edit().putString("currentUserClassId", currentUserClassId).apply();
     }
 
     public Uri getCurrentUserProfileImg() {
+        if (currentUserProfileImg == null) {
+            String uriString = sharedPreferences.getString("currentUserProfileImg", null);
+            if (uriString != null) {
+                currentUserProfileImg = Uri.parse(uriString);
+            }
+        }
         return currentUserProfileImg;
     }
 
     public void setCurrentUserProfileImg(Uri currentUserProfileImg) {
         this.currentUserProfileImg = currentUserProfileImg;
+        sharedPreferences.edit().putString("currentUserProfileImg", currentUserProfileImg.toString()).apply();
     }
 
-    public Context getApplicationContext() {
-        return applicationContext;
-    }
-
-    public void clear() {
+    public void clearCurrentUser() {
+        sharedPreferences.edit().clear().apply();
+        currentUserClassId = null;
+        currentUserContactNo = null;
+        currentUserDepartmentId = null;
+        currentUserEmail = null;
         currentUserId = null;
         currentUserName = null;
-        currentUserEmail = null;
-        currentUserContactNo = null;
-        currentUserRole = null;
-        currentUserDepartmentId = null;
-        currentUserClassId = null;
         currentUserProfileImg = null;
+        currentUserRole = null;
     }
 
     public void loadCurrentUser(FirebaseUser user) {

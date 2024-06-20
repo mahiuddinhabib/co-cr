@@ -14,19 +14,23 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.habib.cocr.databinding.ActivityMainBinding;
 import com.habib.cocr.ui.more.MoreOptionsBottomSheet;
+import com.habib.cocr.utils.GlobalState;
 
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
     public static TextView actionBarTitle;
     ImageView accountIcon;
+    private final FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        GlobalState.getInstance(this);
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         getSupportActionBar().setCustomView(R.layout.custom_action_bar);
         actionBarTitle = findViewById(R.id.fragment_title);
@@ -65,6 +69,16 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if(mAuth.getCurrentUser() == null) {
+            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+            startActivity(intent);
+            finish();
+        }
     }
 
 }

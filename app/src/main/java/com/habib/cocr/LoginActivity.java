@@ -48,21 +48,6 @@ public class LoginActivity extends AppCompatActivity {
                                 // Sign in success, update UI with the signed-in user's information
                                 FirebaseUser user = mAuth.getCurrentUser();
 
-                                // update profile picture
-                                UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                                        .setPhotoUri(Uri.parse("https://w7.pngwing.com/pngs/48/259/png-transparent-profile-man-male-photo-face-portrait-illustration-vector-people-blue.png"))
-                                        .build();
-
-                                user.updateProfile(profileUpdates)
-                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<Void> task) {
-                                                if (task.isSuccessful()) {
-                                                    Log.d("Image Update", "User profile updated.");
-                                                }
-                                            }
-                                        });
-
                                 // Store user data in global state
                                 GlobalState globalState = GlobalState.getInstance(LoginActivity.this);
                                 globalState.loadCurrentUser(user);

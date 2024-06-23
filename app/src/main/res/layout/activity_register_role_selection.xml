@@ -8,6 +8,16 @@
     tools:context=".RegisterRoleSelectionActivity">
 
     <Button
+        android:id="@+id/crButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="16dp"
+        android:drawableTop="@drawable/ic_cr"
+        android:text="CR"
+        android:textSize="14sp"/>
+
+    <Button
         android:id="@+id/teacherButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -17,22 +17,22 @@ import com.google.firebase.firestore.FirebaseFirestore;
 public class GlobalState {
     private static GlobalState globalState = null;
     private final Context applicationContext;
-    private final SharedPreferences sharedPreferences;
+    private static SharedPreferences sharedPreferences = null;
 
     // Global states
-    private String currentUserId;
-    private String currentUserName;
-    private String currentUserEmail;
-    private String currentUserContactNo;
-    private String currentUserRole;
-    private String currentUserDepartmentId;
-    private String currentUserClassId;
-    private Uri currentUserProfileImg;
+    private static String currentUserId;
+    private static String currentUserName;
+    private static String currentUserEmail;
+    private static String currentUserContactNo;
+    private static String currentUserRole;
+    private static String currentUserDepartmentId;
+    private static String currentUserClassId;
+    private static Uri currentUserProfileImg;
 
     // Private constructor
     private GlobalState(Context context) {
         this.applicationContext = context.getApplicationContext();
-        this.sharedPreferences = context.getSharedPreferences("GlobalStatePrefs", Context.MODE_PRIVATE);
+        sharedPreferences = context.getSharedPreferences("GlobalStatePrefs", Context.MODE_PRIVATE);
     }
 
     // Getters and Setters
@@ -43,91 +43,91 @@ public class GlobalState {
         return globalState;
     }
 
-    public String getCurrentUserId() {
+    public static String getCurrentUserId() {
         if (currentUserId == null) {
             currentUserId = sharedPreferences.getString("currentUserId", null);
         }
         return currentUserId;
     }
 
-    public void setCurrentUserId(String currentUserId) {
-        this.currentUserId = currentUserId;
+    public static void setCurrentUserId(String currentUserId) {
+        GlobalState.currentUserId = currentUserId;
         sharedPreferences.edit().putString("currentUserId", currentUserId).apply();
     }
 
-    public String getCurrentUserName() {
+    public static String getCurrentUserName() {
         if (currentUserName == null) {
             currentUserName = sharedPreferences.getString("currentUserName", null);
         }
         return currentUserName;
     }
 
-    public void setCurrentUserName(String currentUserName) {
-        this.currentUserName = currentUserName;
+    public static void setCurrentUserName(String currentUserName) {
+        GlobalState.currentUserName = currentUserName;
         sharedPreferences.edit().putString("currentUserName", currentUserName).apply();
     }
 
-    public String getCurrentUserEmail() {
+    public static String getCurrentUserEmail() {
         if (currentUserEmail == null) {
             currentUserEmail = sharedPreferences.getString("currentUserEmail", null);
         }
         return currentUserEmail;
     }
 
-    public void setCurrentUserEmail(String currentUserEmail) {
-        this.currentUserEmail = currentUserEmail;
+    public static void setCurrentUserEmail(String currentUserEmail) {
+        GlobalState.currentUserEmail = currentUserEmail;
         sharedPreferences.edit().putString("currentUserEmail", currentUserEmail).apply();
     }
 
-    public String getCurrentUserContactNo() {
+    public static String getCurrentUserContactNo() {
         if (currentUserContactNo == null) {
             currentUserContactNo = sharedPreferences.getString("currentUserContactNo", null);
         }
         return currentUserContactNo;
     }
 
-    public void setCurrentUserContactNo(String currentUserContactNo) {
-        this.currentUserContactNo = currentUserContactNo;
+    public static void setCurrentUserContactNo(String currentUserContactNo) {
+        GlobalState.currentUserContactNo = currentUserContactNo;
         sharedPreferences.edit().putString("currentUserContactNo", currentUserContactNo).apply();
     }
 
-    public String getCurrentUserRole() {
+    public static String getCurrentUserRole() {
         if (currentUserRole == null) {
             currentUserRole = sharedPreferences.getString("currentUserRole", null);
         }
         return currentUserRole;
     }
 
-    public void setCurrentUserRole(String currentUserRole) {
-        this.currentUserRole = currentUserRole;
+    public static void setCurrentUserRole(String currentUserRole) {
+        GlobalState.currentUserRole = currentUserRole;
         sharedPreferences.edit().putString("currentUserRole", currentUserRole).apply();
     }
 
-    public String getCurrentUserDepartmentId() {
+    public static String getCurrentUserDepartmentId() {
         if (currentUserDepartmentId == null) {
             currentUserDepartmentId = sharedPreferences.getString("currentUserDepartmentId", null);
         }
         return currentUserDepartmentId;
     }
 
-    public void setCurrentUserDepartmentId(String currentUserDepartmentId) {
-        this.currentUserDepartmentId = currentUserDepartmentId;
+    public static void setCurrentUserDepartmentId(String currentUserDepartmentId) {
+        GlobalState.currentUserDepartmentId = currentUserDepartmentId;
         sharedPreferences.edit().putString("currentUserDepartmentId", currentUserDepartmentId).apply();
     }
 
-    public String getCurrentUserClassId() {
+    public static String getCurrentUserClassId() {
         if (currentUserClassId == null) {
             currentUserClassId = sharedPreferences.getString("currentUserClassId", null);
         }
         return currentUserClassId;
     }
 
-    public void setCurrentUserClassId(String currentUserClassId) {
-        this.currentUserClassId = currentUserClassId;
+    public static void setCurrentUserClassId(String currentUserClassId) {
+        GlobalState.currentUserClassId = currentUserClassId;
         sharedPreferences.edit().putString("currentUserClassId", currentUserClassId).apply();
     }
 
-    public Uri getCurrentUserProfileImg() {
+    public static Uri getCurrentUserProfileImg() {
         if (currentUserProfileImg == null) {
             String uriString = sharedPreferences.getString("currentUserProfileImg", null);
             if (uriString != null) {
@@ -137,12 +137,12 @@ public class GlobalState {
         return currentUserProfileImg;
     }
 
-    public void setCurrentUserProfileImg(Uri currentUserProfileImg) {
-        this.currentUserProfileImg = currentUserProfileImg;
+    public static void setCurrentUserProfileImg(Uri currentUserProfileImg) {
+        GlobalState.currentUserProfileImg = currentUserProfileImg;
         sharedPreferences.edit().putString("currentUserProfileImg", currentUserProfileImg.toString()).apply();
     }
 
-    public void clearCurrentUser() {
+    public static void clearCurrentUser() {
         sharedPreferences.edit().clear().apply();
         currentUserClassId = null;
         currentUserContactNo = null;
@@ -154,7 +154,7 @@ public class GlobalState {
         currentUserRole = null;
     }
 
-    public void loadCurrentUser(FirebaseUser user) {
+    public static void loadCurrentUser(FirebaseUser user) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("users").document(user.getUid())
                 .get()

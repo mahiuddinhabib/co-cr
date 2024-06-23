@@ -1,5 +1,7 @@
 package com.habib.cocr;
 
+import static com.habib.cocr.utils.GlobalState.loadCurrentUser;
+
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -44,13 +46,13 @@ public class LoginActivity extends AppCompatActivity {
 
                 mAuth.signInWithEmailAndPassword(email, password)
                         .addOnCompleteListener(LoginActivity.this, task -> {
-                            if (task.isSuccessful()) {
+                            if (task.isSuccessful() && mAuth.getCurrentUser() != null) {
                                 // Sign in success, update UI with the signed-in user's information
                                 FirebaseUser user = mAuth.getCurrentUser();
 
                                 // Store user data in global state
-                                GlobalState globalState = GlobalState.getInstance(LoginActivity.this);
-                                globalState.loadCurrentUser(user);
+//                                GlobalState globalState = GlobalState.getInstance(LoginActivity.this);
+                                loadCurrentUser(user);
                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                 startActivity(intent);
                                 finish();
@@ -69,6 +71,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(LoginActivity.this, RegisterRoleSelectionActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
     }

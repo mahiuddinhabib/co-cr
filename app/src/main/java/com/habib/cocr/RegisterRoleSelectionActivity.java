@@ -8,16 +8,24 @@ import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class RegisterRoleSelectionActivity extends AppCompatActivity {
-    private Button teacherButton, studentButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_role_selection);
 
-        teacherButton = findViewById(R.id.teacherButton);
-        studentButton = findViewById(R.id.studentButton);
+        Button teacherButton = findViewById(R.id.teacherButton);
+        Button studentButton = findViewById(R.id.studentButton);
+        Button crButton = findViewById(R.id.crButton);
 
+        crButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(RegisterRoleSelectionActivity.this, StudentRegisterActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
         teacherButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -31,6 +39,7 @@ public class RegisterRoleSelectionActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(RegisterRoleSelectionActivity.this, StudentRegisterActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
     }

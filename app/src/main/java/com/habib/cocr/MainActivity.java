@@ -1,5 +1,7 @@
 package com.habib.cocr;
 
+import static com.habib.cocr.utils.GlobalState.getCurrentUserClassId;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -15,6 +17,7 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.habib.cocr.databinding.ActivityMainBinding;
 import com.habib.cocr.ui.more.MoreOptionsBottomSheet;
 import com.habib.cocr.utils.GlobalState;
@@ -67,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, AccountDetailActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
     }
@@ -76,6 +80,10 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
         if(mAuth.getCurrentUser() == null) {
             Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+            startActivity(intent);
+            finish();
+        } else if (getCurrentUserClassId() == null) {
+            Intent intent = new Intent(MainActivity.this, CreateOrJoinClassActivity.class);
             startActivity(intent);
             finish();
         }

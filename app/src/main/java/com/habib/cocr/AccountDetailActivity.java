@@ -1,5 +1,11 @@
 package com.habib.cocr;
 
+import static com.habib.cocr.utils.GlobalState.clearCurrentUser;
+import static com.habib.cocr.utils.GlobalState.getCurrentUserContactNo;
+import static com.habib.cocr.utils.GlobalState.getCurrentUserEmail;
+import static com.habib.cocr.utils.GlobalState.getCurrentUserId;
+import static com.habib.cocr.utils.GlobalState.getCurrentUserName;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -13,7 +19,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.habib.cocr.utils.GlobalState;
 
 public class AccountDetailActivity extends AppCompatActivity {
-    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private final FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private TextView emailTextView, idTextView, nameTextView, contactNoTextView;
     private Button logoutButton;
 
@@ -28,13 +34,13 @@ public class AccountDetailActivity extends AppCompatActivity {
         contactNoTextView = findViewById(R.id.contactNoTextView);
 
         // Get the instance of Global State
-        GlobalState globalState = GlobalState.getInstance(getApplicationContext());
+//        GlobalState globalState = GlobalState.getInstance(getApplicationContext());
 
         // Set the user's details
-        emailTextView.setText(globalState.getCurrentUserEmail());
-        idTextView.setText(globalState.getCurrentUserId());
-        nameTextView.setText(globalState.getCurrentUserName());
-        contactNoTextView.setText(globalState.getCurrentUserContactNo());
+        emailTextView.setText(getCurrentUserEmail());
+        idTextView.setText(getCurrentUserId());
+        nameTextView.setText(getCurrentUserName());
+        contactNoTextView.setText(getCurrentUserContactNo());
 
 
         logoutButton = findViewById(R.id.logoutButton);
@@ -43,7 +49,7 @@ public class AccountDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 FirebaseAuth.getInstance().signOut();
-                globalState.clearCurrentUser();
+                clearCurrentUser();
                 Intent intent = new Intent(AccountDetailActivity.this, LoginActivity.class);
                 startActivity(intent);
                 finish();

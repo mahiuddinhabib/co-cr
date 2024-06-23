@@ -87,9 +87,15 @@ public class StudentRegisterActivity extends AppCompatActivity {
                                             Log.d(TAG, "DocumentSnapshot added with ID: " + user.getUid());
                                             // Store user data in global state
 //                                            GlobalState globalState = GlobalState.getInstance(StudentRegisterActivity.this);
-                                            loadCurrentUser(user);
-                                            startActivity(new Intent(StudentRegisterActivity.this, MainActivity.class));
-                                            finish();
+                                            loadCurrentUser(user, new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    Intent intent = new Intent(StudentRegisterActivity.this, MainActivity.class);
+                                                    startActivity(intent);
+                                                    finish();
+                                                }
+                                            });
+
                                         }
                                     })
                                     .addOnFailureListener(new OnFailureListener() {

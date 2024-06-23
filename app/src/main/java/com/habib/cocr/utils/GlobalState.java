@@ -154,7 +154,7 @@ public class GlobalState {
         currentUserRole = null;
     }
 
-    public static void loadCurrentUser(FirebaseUser user) {
+    public static void loadCurrentUser(FirebaseUser user, Runnable callback) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("users").document(user.getUid())
                 .get()
@@ -176,7 +176,12 @@ public class GlobalState {
                                 if(user.getPhotoUrl() != null) {
                                     setCurrentUserProfileImg(user.getPhotoUrl());
                                 }
-                                // Add other fields as needed
+
+                                // If a callback is provided, run it
+                                if(callback != null) {
+                                    callback.run();
+                                }
+
                             } else {
                                 Log.d("GlobalState", "No such document");
                             }

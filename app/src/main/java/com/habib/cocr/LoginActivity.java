@@ -52,10 +52,15 @@ public class LoginActivity extends AppCompatActivity {
 
                                 // Store user data in global state
 //                                GlobalState globalState = GlobalState.getInstance(LoginActivity.this);
-                                loadCurrentUser(user);
-                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                startActivity(intent);
-                                finish();
+                                loadCurrentUser(user, new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                        startActivity(intent);
+                                        finish();
+                                    }
+                                });
+
                             } else {
                                 // If sign in fails, display a message to the user.
                                 Toast.makeText(LoginActivity.this, "Authentication failed.",

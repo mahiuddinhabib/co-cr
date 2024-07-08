@@ -1,5 +1,6 @@
 package com.habib.cocr;
 
+import static com.habib.cocr.utils.GlobalState.getCurrentUserId;
 import static com.habib.cocr.utils.GlobalState.setCurrentUserClassId;
 import static com.habib.cocr.utils.GlobalState.setCurrentUserDepartmentId;
 
@@ -14,13 +15,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -31,9 +28,11 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.habib.cocr.interfaces.OnSpinnerItemPopulatedCallback;
+import com.habib.cocr.utils.RandomString;
 import com.habib.cocr.utils.SpinnerItem;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -312,17 +311,99 @@ public class CreateNewClassActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
-                        setCurrentUserDepartmentId(departmentId);
-                        setCurrentUserClassId(documentReference.getId());
-
-                        startActivity(new Intent(CreateNewClassActivity.this, MainActivity.class));
-                        finish();
+                        createClassCode(documentReference.getId());
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Log.w(TAG, "Error adding document", e);
+                    }
+                });
+    }
+
+    private void createClassCode(String classId) {
+        String code = RandomString.generateRandomString(6);
+        checkIfCodeExists(code, classId);
+    }
+
+    private void checkIfCodeExists(String code, String classId) {
+        db.collection("classCodes")
+                .whereEqualTo("code", code)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            if (task.getResult().isEmpty()) {
+                                addClassCode(code, classId, ((SpinnerItem) departmentSpinner.getSelectedItem()).getValue());
+                            } else {
+                                createClassCode(classId);
+                            }
+                        } else {
+                            Log.w(TAG, "Error getting documents.", task.getException());
+                            deleteClass(classId);
+                        }
+                    }
+                });
+    }
+
+    private void addClassCode(String code, String classId, String departmentId) {
+        Map<String, Object> classCode = new HashMap<>();
+        classCode.put("code", code);
+        classCode.put("expires", new Date(System.currentTimeMillis() + 3 * 24 * 60 * 60 * 1000)); // 3 days from now
+
+        db.collection("classCodes")
+                .document(classId)
+                .set(classCode)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        updateUserClassAndDepartment(classId, departmentId);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error adding document", e);
+                        deleteClass(classId);
+                    }
+                });
+    }
+
+    private void updateUserClassAndDepartment(String classId, String departmentId) {
+        String currentUserId = getCurrentUserId();
+        if (currentUserId != null) {
+            DocumentReference userRef = db.collection("users").document(currentUserId);
+            userRef.update("classId", classId, "departmentId", departmentId)
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            setCurrentUserClassId(classId);
+                            setCurrentUserDepartmentId(departmentId);
+
+                            startActivity(new Intent(CreateNewClassActivity.this, MainActivity.class));
+                            finish();
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.w(TAG, "Error updating user", e);
+                            deleteClass(classId);
+                        }
+                    });
+        }
+    }
+
+    private void deleteClass(String classId) {
+        db.collection("classes")
+                .document(classId)
+                .delete()
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error deleting document", e);
                     }
                 });
     }

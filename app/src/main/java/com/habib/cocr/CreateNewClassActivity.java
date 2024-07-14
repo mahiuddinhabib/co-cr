@@ -4,6 +4,9 @@ import static com.habib.cocr.utils.GlobalState.getCurrentUserId;
 import static com.habib.cocr.utils.GlobalState.setCurrentUserClassId;
 import static com.habib.cocr.utils.GlobalState.setCurrentUserDepartmentId;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,6 +17,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -23,6 +28,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -359,7 +365,7 @@ public class CreateNewClassActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        updateUserClassAndDepartment(classId, departmentId);
+                        updateUserClassAndDepartment(classId, departmentId, code);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -371,7 +377,7 @@ public class CreateNewClassActivity extends AppCompatActivity {
                 });
     }
 
-    private void updateUserClassAndDepartment(String classId, String departmentId) {
+    private void updateUserClassAndDepartment(String classId, String departmentId , String code) {
         String currentUserId = getCurrentUserId();
         if (currentUserId != null) {
             DocumentReference userRef = db.collection("users").document(currentUserId);
@@ -382,8 +388,8 @@ public class CreateNewClassActivity extends AppCompatActivity {
                             setCurrentUserClassId(classId);
                             setCurrentUserDepartmentId(departmentId);
 
-                            startActivity(new Intent(CreateNewClassActivity.this, MainActivity.class));
-                            finish();
+                            showClassCodeBottomSheet(code);
+
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
@@ -406,6 +412,40 @@ public class CreateNewClassActivity extends AppCompatActivity {
                         Log.w(TAG, "Error deleting document", e);
                     }
                 });
+    }
+
+    private void showClassCodeBottomSheet(String classCode) {
+        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(CreateNewClassActivity.this);
+        View view = getLayoutInflater().inflate(R.layout.dialog_class_code, null);
+        bottomSheetDialog.setContentView(view);
+
+        TextView tvClassCode = view.findViewById(R.id.tvClassCode);
+        Button btnCopyCode = view.findViewById(R.id.btnCopyCode);
+
+        tvClassCode.setText(classCode);
+
+        btnCopyCode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText("classCode", classCode);
+                clipboard.setPrimaryClip(clip);
+
+                Toast.makeText(CreateNewClassActivity.this, "Code copied to clipboard", Toast.LENGTH_SHORT).show();
+
+                bottomSheetDialog.dismiss();
+            }
+        });
+
+        bottomSheetDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                startActivity(new Intent(CreateNewClassActivity.this, MainActivity.class));
+                finish();
+            }
+        });
+
+        bottomSheetDialog.show();
     }
 }
 

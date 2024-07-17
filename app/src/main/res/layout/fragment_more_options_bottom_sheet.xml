@@ -1,71 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:gravity="center"
-    android:padding="16dp"
-    android:orientation="horizontal">
+    android:columnCount="3"
+    android:paddingVertical="16dp"
+    android:paddingHorizontal="50dp"
+    android:gravity="center">
 
-    <LinearLayout
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/myClassButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="vertical">
-        <ImageButton
-            android:id="@+id/settingsButton"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:background="@drawable/circled_bg"
-            android:src="@drawable/ic_outline_access_alarms_34" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Alert" />
-    </LinearLayout>
+        android:background="@android:color/transparent"
+        android:drawableTop="@drawable/ic_filled_class_40"
+        android:drawableTint="@color/purple_700"
+        android:textColor="@color/purple_700"
+        android:textSize="11sp"
+        android:text="My Class" />
 
 
-    <LinearLayout
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/reminderButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="vertical">
+        android:layout_gravity="center_horizontal"
+        android:background="@android:color/transparent"
+        android:drawableTop="@drawable/ic_filled_schedule_40"
+        android:drawableTint="@color/purple_700"
+        android:textColor="@color/purple_700"
+        android:textSize="11sp"
+        android:text="Reminder" />
 
-        <ImageButton
-            android:id="@+id/helpButton"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_marginStart="40dp"
-            android:layout_marginEnd="40dp"
-            android:background="@drawable/circled_bg"
-            android:src="@drawable/ic_outline_settings_34" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Setting" />
-    </LinearLayout>
-
-    <LinearLayout
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/settingsButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="vertical">
+        android:background="@android:color/transparent"
+        android:drawableTop="@drawable/ic_filled_settings_40"
+        android:drawableTint="@color/purple_700"
+        android:textColor="@color/purple_700"
+        android:textSize="11sp"
+        android:text="Setting" />
 
-        <ImageButton
-            android:id="@+id/alertButton"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:background="@drawable/circled_bg"
-            android:src="@drawable/ic_outline_help_outline_34" />
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/helpButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:drawableTop="@drawable/ic_filled_help_40"
+        android:drawableTint="@color/purple_700"
+        android:textColor="@color/purple_700"
+        android:textSize="11sp"
+        android:text="Help" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Help" />
-
-    </LinearLayout>
 
     <!-- Add more buttons as needed -->
 
-</LinearLayout>
+</GridLayout>
